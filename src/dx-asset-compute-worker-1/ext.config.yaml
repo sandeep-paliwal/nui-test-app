@@ -1,0 +1,41 @@
+operations:
+  apply:
+    - type: action
+      impl: dx-asset-compute-worker-1/worker
+hooks:
+  post-app-run: adobe-asset-compute devtool
+  test: adobe-asset-compute test-worker
+actions: actions
+runtimeManifest:
+  packages:
+    dx-asset-compute-worker-1:
+      license: Apache-2.0
+      actions:
+        worker:
+          function: actions/worker/index.js
+          web: 'yes'
+          runtime: 'nodejs:14'
+          limits:
+            concurrency: 10
+          annotations:
+            require-adobe-auth: true
+        cutout:
+          function: actions/cutout/index.js
+          web: 'yes'
+          runtime: 'nodejs:14'
+          limits:
+            concurrency: 10
+          inputs:
+            apiKey: $USER_API_KEY
+          annotations:
+            require-adobe-auth: true
+        autotone:
+          function: actions/autotone/index.js
+          web: 'yes'
+          runtime: 'nodejs:14'
+          limits:
+            concurrency: 10
+          inputs:
+            apiKey: $SERVICE_API_KEY
+          annotations:
+            require-adobe-auth: true
